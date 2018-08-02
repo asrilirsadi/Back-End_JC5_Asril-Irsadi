@@ -1,14 +1,34 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'; 
+import axios from 'axios';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Cookies from 'universal-cookie';
 
-import { Link } from 'react-router-dom'; 
+import Header from './Header';
+import SideBar from './SideBar';
+import Footer from './Footer';
+
+function mapStateToProps(state)
+{
+    return {
+                login: state.hasil_login
+            };
+}
 
 class Dashboard extends Component 
 {
     render() 
     {
+        const cookies = new Cookies();
+        let mycookie1 = cookies.get('sessionID');
+        let SideNav = (mycookie1) ? <SideBar/>
+
         return (
                 <div>
-                   <div className="content-wrapper">
+                    <Header />
+                    {SideNav}
+                    
+                    <div className="content-wrapper">
                         {/* Content Header (Page header) */}
                         <section className="content-header">
                             <h1>
@@ -16,7 +36,7 @@ class Dashboard extends Component
                             <small>Control panel</small>
                             </h1>
                             <ol className="breadcrumb">
-                            <li><Link to="/"><i className="fa fa-dashboard" /> Home</Link></li>
+                            <li><Link to="/dashboard"><i className="fa fa-dashboard" /> Home</Link></li>
                             <li className="active">Dashboard</li>
                             </ol>
                         </section>
@@ -484,9 +504,10 @@ class Dashboard extends Component
                         </section>
                         {/* /.content */}
                     </div>
+                    <Footer />
                 </div>    
                 );
     }
 }
 
-export default Dashboard;
+export default connect(mapStateToProps)(Dashboard);

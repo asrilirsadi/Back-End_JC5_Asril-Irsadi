@@ -38,23 +38,23 @@ class SideBar extends Component
                                 <li className="header">Navigasi Utama</li>
                                 {/* Optionally, you can add icons to the links */}
                                 {/* Dashboard */}
-                                <li><Link to="/"><i className="fa fa-link" /> <span>Dashboard</span></Link></li>
+                                <li><Link to="/dashboard"><i className="fa fa-link" /> <span>Dashboard</span></Link></li>
                                 {/* Produk */}
                                 <li className="treeview">
                                     {/* <a href="#"><i className="fa fa-link" /> <span>Produk</span> */}
-                                    <Link to="/produk_mobil_baru"><i className="fa fa-link" /> <span>Produk</span>
+                                    <Link to="/dashboard/produk_mobil_baru"><i className="fa fa-link" /> <span>Produk</span>
                                     <span className="pull-right-container">
                                         <i className="fa fa-angle-left pull-right" />
                                     </span>
                                     </Link>
                                     <ul className="treeview-menu">
-                                    <li><Link to="/produk_mobil_baru">Mobil Baru</Link></li>
-                                    <li><Link to="/produk_mobil_bekas">Mobil Bekas</Link></li>
+                                    <li><Link to="/dashboard/produk_mobil_baru">Mobil Baru</Link></li>
+                                    <li><Link to="/dashboard/produk_mobil_bekas">Mobil Bekas</Link></li>
                                     <li><a href="#">Aksesoris</a></li>
                                     </ul>
                                 </li>
                                 {/* Invoice Customer */}
-                                <li><Link to="/invoice_customer"><i className="fa fa-link" /> <span>Invoice Customer</span></Link></li>
+                                <li><Link to="/dashboard/invoice_customer"><i className="fa fa-link" /> <span>Invoice Customer</span></Link></li>
                             </ul>
                             {/* /.sidebar-menu */}
                         </section>

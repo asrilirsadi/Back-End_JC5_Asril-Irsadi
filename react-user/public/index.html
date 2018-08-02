@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
+    <!-- <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#000000"> -->
     <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
@@ -19,8 +19,117 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Auto Shop</title>
+
+    <!--css-->
+      <link href="./css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+      <link href="./css/style.css" rel="stylesheet" type="text/css" media="all" />
+      <link href="./css/font-awesome.css" rel="stylesheet">
+		<!--css-->
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="New Shop Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+		Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+		<script src="./js/jquery.min.js"></script>
+
+		<link href="css/coreSlider.css" rel="stylesheet" type="text/css">
+		<script src="js/coreSlider.js"></script>
+    
+    <link href='//fonts.googleapis.com/css?family=Cagliostro' rel='stylesheet' type='text/css'>
+		<link href='//fonts.googleapis.com/css?family=Open+Sans:400,800italic,800,700italic,700,600italic,600,400italic,300italic,300' rel='stylesheet' type='text/css'>
+
+		<!--search jQuery-->
+    <script src="./src/js/main.js"></script>
+    <!--search jQuery-->
+    <script src="./src/js/main.js"></script>
+		
+		<script>
+			$(function () 
+			{
+				$("#slider").responsiveSlides(
+				{
+					auto: true,
+					nav: true,
+					speed: 500,
+					namespace: "callbacks",
+					pager: true,
+				});
+			});
+		</script>
+		
+		<!--mycart-->
+    <script type="text/javascript" src="./js/bootstrap-3.1.1.min.js"></script>
+		<!-- cart -->
+		<script src="./src/js/simpleCart.min.js"></script>
+		<!-- cart -->
+		
+    <!--start-rate-->
+		<script src="./src/js/jstarbox.js"></script>
+		<link rel="stylesheet" href="./src/js/jstarbox.js" type="text/css" media="screen" charset="utf-8" />
+		
+		<script type="text/javascript">
+			jQuery(function() 
+			{
+				jQuery('.starbox').each(function() 
+				{
+					var starbox = jQuery(this);
+					
+					starbox.starbox(
+					{
+						average: starbox.attr('data-start-value'),
+						changeable: starbox.hasClass('unchangeable') ? false : starbox.hasClass('clickonce') ? 'once' : true,
+						ghosting: starbox.hasClass('ghosting'),
+						autoUpdateAverage: starbox.hasClass('autoupdate'),
+						buttons: starbox.hasClass('smooth') ? false : starbox.attr('data-button-count') || 5,
+						stars: starbox.attr('data-star-count') || 5
+					}).bind('starbox-value-changed', function(event, value) 
+					{
+						if(starbox.hasClass('random')) 
+						{
+							var val = Math.random();
+							starbox.next().text(' '+val);
+							return val;
+						} 
+					})
+				});
+			});
+		</script>
+		<!--//End-rate-->
+
+		<!-- script banner -->
+		<script>
+			$('#example1').coreSlider(
+			{
+					pauseOnHover: false,
+					interval: 3000,
+					controlNavEnabled: true
+			});
+		</script>
+
+		<!-- script price (page product list) -->
+		<script type='text/javascript'>//<![CDATA[ 
+			$(window).load(function()
+			{
+				$( "#slider-range" ).slider(
+				{
+					range: true,
+					min: 0,
+					max: 2000,
+					values: [ 300, 1200 ],
+					slide: function( event, ui )
+					{  
+						$( "#amount" ).val( "Rp" + ui.values[ 0 ] + " - Rp" + ui.values[ 1 ] );
+					}
+				});
+				$( "#amount" ).val( "Rp" + $( "#slider-range" ).slider( "values", 0 ) + " - Rp" + $( "#slider-range" ).slider( "values", 1 ) );
+			});//]]>  
+		</script>
+
   </head>
+
   <body>
     <noscript>
       You need to enable JavaScript to run this app.

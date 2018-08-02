@@ -15,7 +15,7 @@ class Produk1 extends Component
                             <small>Mobil Baru</small>
                             </h1>
                             <ol className="breadcrumb">
-                            <li><Link to="/"><i className="fa fa-dashboard"></i> Home</Link></li>
+                            <li><Link to="/dashboard"><i className="fa fa-dashboard"></i> Home</Link></li>
                             <li><a href="#">Produk</a></li>
                             <li className="active">Mobil Baru</li>
                             </ol>
