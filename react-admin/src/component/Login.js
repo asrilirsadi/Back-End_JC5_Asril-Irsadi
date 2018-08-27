@@ -23,8 +23,9 @@ class Login extends Component
             password: password
         }).then((response) => 
         {
-            var userSession = response.data;
-            cookies.set('sessionID', userSession, { path: '/dashboard'});
+            var adminID = response.data;
+            console.log(adminID);
+            cookies.set('sessionID', adminID, { path: '/'});
             this.setState({
                             redirect: true
                         })

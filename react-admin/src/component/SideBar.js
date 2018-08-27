@@ -1,9 +1,33 @@
 import React, { Component } from 'react';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 
+const cookies = new Cookies();
+
 class SideBar extends Component 
 {
+    state =
+    {
+        adminData:'',
+    }
+    componentDidMount()
+    {
+        var userID = cookies.get('sessionID');
+        axios.post('http://localhost:8000/dataadmin',
+        {
+            userID: userID
+        })
+        .then((response) =>
+        {
+            this.setState({
+                            adminData : response.data,
+                        })
+            console.log(this.state.adminData);
+        })
+    }
+
     render() 
     {
         return (
@@ -17,7 +41,7 @@ class SideBar extends Component
                                 <img src="dist/img/user2-160x160.jpg" className="img-circle" alt="User Image" />
                             </div>
                             <div className="pull-left info">
-                                <p>Asril Irsadi</p>
+                                <p>{this.state.adminData}</p>
                                 <a href="#"><i className="fa fa-circle text-success" /> Online</a>
                             </div>
                             </div>
@@ -37,24 +61,51 @@ class SideBar extends Component
                             <ul className="sidebar-menu" data-widget="tree">
                                 <li className="header">Navigasi Utama</li>
                                 {/* Optionally, you can add icons to the links */}
+                                
                                 {/* Dashboard */}
-                                <li><Link to="/dashboard"><i className="fa fa-link" /> <span>Dashboard</span></Link></li>
-                                {/* Produk */}
-                                <li className="treeview">
-                                    {/* <a href="#"><i className="fa fa-link" /> <span>Produk</span> */}
-                                    <Link to="/dashboard/produk_mobil_baru"><i className="fa fa-link" /> <span>Produk</span>
-                                    <span className="pull-right-container">
-                                        <i className="fa fa-angle-left pull-right" />
-                                    </span>
-                                    </Link>
+                                <li><Link to="/dashboard"><i className="fa fa-dashboard" /> <span>Dashboard</span></Link></li>
+                                
+                                {/* Category */}
+                                <li><Link to="/category_brand"><i className="fa fa-dashboard" /> <span>Category: Brand</span></Link></li>
+                                <li><Link to="/category_model"><i className="fa fa-dashboard" /> <span>Category: Model</span></Link></li>
+                                <li><Link to="/category_variant"><i className="fa fa-dashboard" /> <span>Category: Variant</span></Link></li>
+                                <li><Link to="/category_body_type"><i className="fa fa-dashboard" /> <span>Category: Body Type</span></Link></li>
+                                <li><Link to="/category_colour"><i className="fa fa-dashboard" /> <span>Category: Colour</span></Link></li>
+                                <li><Link to="/category_province"><i className="fa fa-dashboard" /> <span>Category: Province</span></Link></li>
+                                <li><Link to="/category_city_or_district"><i className="fa fa-dashboard" /> <span>Category: City or District</span></Link></li>
+                                
+                                {/* Product */}
+                                <li><Link to="/product_adding"><i className="fa fa-dashboard" /> <span>Add: Product</span></Link></li>
+                                <li><Link to="/product_spec_adding"><i className="fa fa-dashboard" /> <span>Add: Product Spec</span></Link></li>
+                                <li><Link to="/product_image_adding"><i className="fa fa-dashboard" /> <span>Add: Product Image</span></Link></li>
+                                <li><Link to="/product_saved"><i className="fa fa-dashboard" /> <span>Product: List</span></Link></li>
+                                <li><Link to="/product_spec_saved"><i className="fa fa-dashboard" /> <span>Product: Product Spec</span></Link></li>
+                                <li><Link to="/product_image_saved"><i className="fa fa-dashboard" /> <span>Product: Product Image</span></Link></li>
+
+                                {/* <li className="treeview">
+                                    <a href="#"><i className="fa fa-link" /> <span>Category</span>
+                                        <span className="pull-right-container"><i className="fa fa-angle-left pull-right" /></span>
+                                    </a>
+                                    
                                     <ul className="treeview-menu">
-                                    <li><Link to="/dashboard/produk_mobil_baru">Mobil Baru</Link></li>
-                                    <li><Link to="/dashboard/produk_mobil_bekas">Mobil Bekas</Link></li>
-                                    <li><a href="#">Aksesoris</a></li>
+                                        <li><Link to="/category_merk">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Merk</Link></li>
+                                        <li><Link to="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Colour, Body Type</Link></li>
+                                        <li><Link to="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Region</Link></li>
                                     </ul>
-                                </li>
+                                </li> */}
+                               
+                                {/* <li className="treeview">
+                                    <a href="#"><i className="fa fa-automobile" /> <span>Product</span>
+                                        <span className="pull-right-container"><i className="fa fa-angle-left pull-right" /></span>
+                                    </a>
+                                    
+                                    <ul className="treeview-menu">
+                                        <li><Link to="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add Product</Link></li>
+                                        <li><Link to="#">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Saved Product</Link></li>
+                                    </ul>
+                                </li> */}
                                 {/* Invoice Customer */}
-                                <li><Link to="/dashboard/invoice_customer"><i className="fa fa-link" /> <span>Invoice Customer</span></Link></li>
+                                <li><Link to="#"><i className="fa fa-link" /> <span>Invoice Customer</span></Link></li>
                             </ul>
                             {/* /.sidebar-menu */}
                         </section>

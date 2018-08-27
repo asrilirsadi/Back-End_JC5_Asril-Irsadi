@@ -1,11 +1,36 @@
 import React, { Component } from 'react';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 // import {Link} from 'react-router-dom';
 
+const cookies = new Cookies();
+
 class Header extends Component 
 {
+    state =
+    {
+        adminData:'',
+    }
+    componentDidMount()
+    {
+        var userID = cookies.get('sessionID');
+        axios.post('http://localhost:8000/dataadmin',
+        {
+            userID: userID
+        })
+        .then((response) =>
+        {
+            this.setState({
+                            adminData : response.data,
+                        })
+            console.log(this.state.adminData);
+        })
+    }
+
     render() 
     {
+
         return (
                 <div>
                     <header className="main-header">
@@ -221,14 +246,14 @@ class Header extends Component
                                 <li className="dropdown user user-menu">
                                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                                     <img src="dist/img/user2-160x160.jpg" className="user-image" alt="User Image" />
-                                    <span className="hidden-xs">Asril Irsadi</span>
+                                    <span className="hidden-xs">{this.state.adminData}</span>
                                 </a>
                                 <ul className="dropdown-menu">
                                     {/* User image */}
                                     <li className="user-header">
                                     <img src="dist/img/user2-160x160.jpg" className="img-circle" alt="User Image" />
                                     <p>
-                                        Asril Irsadi - Web Developer
+                                        {this.state.adminData} - Web Developer
                                         <small>Member since April 2018</small>
                                     </p>
                                     </li>
