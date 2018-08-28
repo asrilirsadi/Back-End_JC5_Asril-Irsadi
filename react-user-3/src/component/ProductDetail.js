@@ -1,9 +1,152 @@
 import React, { Component } from 'react';
-
 import {Link} from 'react-router-dom'; 
+import axios from 'axios';
 
 class ProductDetail extends Component 
 {
+    
+    // myFunction = (id) => 
+    // {
+    //     var x = document.getElementById(id);
+    //     if (x.className.indexOf("sipro-show") == -1) 
+    //     {
+    //         x.className += " sipro-show";
+    //         x.previousElementSibling.className = 
+    //         x.previousElementSibling.className.replace("sipro-black", "sipro-red");
+    //     } 
+    //     else 
+    //     { 
+    //         x.className = x.className.replace(" sipro-show", "");
+    //         x.previousElementSibling.className = 
+    //         x.previousElementSibling.className.replace("sipro-red", "sipro-black");
+    //     }
+    // }
+    
+   
+    state = 
+    {
+        //state for product data
+        productID: '',
+        merk: '',
+        model: '',
+        model_id: '',
+        variant: '',
+        variant_id: '',
+        bodytype: '',
+        bodytype_id: '',
+        prodyear: '',
+        conditioncar: '',
+        price_Rp: '',
+        image1: '',
+        image2: '',
+        image3: '',
+        image4: '',
+        overview: '',
+        
+        //state for spec
+        engine: '',
+        torque: '',
+        power: '',
+        width: '',
+        height: '',
+        wheelbase: '',
+        groudclearance: '',
+        interior: '',
+        exterior: '',
+        safety: '',
+    }
+
+    componentDidMount()
+    {
+        var productID = this.props.location.state.productID;
+        //console.log(productID);
+        this.setState({productID:productID})
+        // var modelID = '';
+        // var variantID = '';
+        // var bodytypeID = '';
+        // var prodyear = '';
+
+        axios.post('http://localhost:8000/getproductchoosen/' + productID)
+        .then((ambildata) => 
+        {
+            // var modelID = '';
+            // var variantID = '';
+            // var bodytypeID = '';
+            // var prodyear = '';
+            
+            // modelID = ambildata.data[0].model_id;
+            // variantID = ambildata.data[0].variant_id;
+            // bodytypeID = ambildata.data[0].bodytype_id;
+            // prodyear = ambildata.data[0].prodyear;
+            
+            // console.log(modelID);
+            // console.log(variantID);
+            // console.log(bodytypeID);
+            // console.log(prodyear);
+            //console.log(ambildata);
+            this.setState({
+                            model_id : ambildata.data[0].model_id,
+                            variant_id : ambildata.data[0].variant_id,
+                            bodytype_id : ambildata.data[0].bodytype_id,
+                            prodyear : ambildata.data[0].prodyear,
+
+                            merk: ambildata.data[0].merk,
+                            model: ambildata.data[0].model,
+                            variant: ambildata.data[0].variant,
+                            bodytype: ambildata.data[0].body_type,
+                            
+                            conditioncar: ambildata.data[0].conditioncar,
+                            price_Rp: ambildata.data[0].price_Rp,
+                            image1: ambildata.data[0].image1,
+                            image2: ambildata.data[0].image2,
+                            image3: ambildata.data[0].image3,
+                            image4: ambildata.data[0].image4,
+                            overview: ambildata.data[0].overview,
+                        })
+
+                        // console.log(this.state.model_id);
+                        // console.log(this.state.variant_id);
+                        // console.log(this.state.bodytype_id);
+                        // console.log(this.state.prodyear);
+
+        });
+
+        
+
+        var modelID = this.state.model_id;
+        var variantID = this.state.variant_id;
+        var bodytypeID = this.state.bodytype_id;
+        var prodyear = this.state.prodyear;
+        console.log(modelID);
+        console.log(variantID);
+        console.log(bodytypeID);
+        console.log(prodyear);
+
+        // axios.post('http://localhost:8000/getproductspec',
+        // {
+        //     modelID : modelID,
+        //     variantID : variantID,
+        //     bodytypeID : bodytypeID,
+        //     prodyear : prodyear  
+        axios.post('http://localhost:8000/getproductspec/'+modelID+ '/' +variantID+ '/' +bodytypeID+ '/' +prodyear)
+        .then((response) => 
+        {
+            console.log(response);
+            this.setState({
+                            engine: response.data[0].engine_cc,
+                            torque: response.data[0].torque_Nm,
+                            power: response.data[0].power_hp,
+                            width: response.data[0].width_mm,
+                            height: response.data[0].height_mm,
+                            wheelbase: response.data[0].wheelbase_mm,
+                            groudclearance: response.data[0].groudclearance_mm,
+                            interior: response.data[0].interior,
+                            exterior: response.data[0].exterior,
+                            safety: response.data[0].safety,
+                        })
+        })
+    }
+
     render() 
     {
         return ( 
@@ -23,48 +166,34 @@ class ProductDetail extends Component
                                             <div className="single-left">
                                                 <div className="flexslider">
                                                     <ul className="slides">
-                                                        <li data-thumb="images/Single Product/sipro_HondaCRV2.4PrestigePutih_1.jpg">
-                                                            <div className="thumb-image"> <img src="./../images/Single Product/sipro_HondaCRV2.4PrestigePutih_1.jpg" data-imagezoom="true" className="img-responsive" /> </div>
+                                                        <li data-thumb={`http://localhost:8000/` + `Images/${this.state.image1}`}>
+                                                            <div className="thumb-image"> <img src={`http://localhost:8000/` + `Images/${this.state.image1}`} data-imagezoom="true" className="img-responsive" /> </div>
                                                         </li>
 
-                                                        <li data-thumb="images/Single Product/sipro_HondaCRV2.4PrestigePutih_2.jpg">
-                                                            <div className="thumb-image"> <img src="./../images/Single Product/sipro_HondaCRV2.4PrestigePutih_2.jpg" data-imagezoom="true" className="img-responsive" /> </div>
+                                                        <li data-thumb={'http://localhost:8000/Images/'+ this.state.image2}>
+                                                            <div className="thumb-image"> <img src={'http://localhost:8000/Images/'+ this.state.image2} data-imagezoom="true" className="img-responsive" /> </div>
                                                         </li>
 
-                                                        <li data-thumb="images/Single Product/sipro_HondaCRV2.4PrestigePutih_6.jpg">
-                                                            <div className="thumb-image"> <img src="./../images/Single Product/sipro_HondaCRV2.4PrestigePutih_6.jpg" data-imagezoom="true" className="img-responsive" /> </div>
+                                                        <li data-thumb={'http://localhost:8000/Images/'+ this.state.image3}>
+                                                            <div className="thumb-image"> <img src={'http://localhost:8000/Images/'+ this.state.image3} data-imagezoom="true" className="img-responsive" /> </div>
                                                         </li>
                                                         
-                                                        <li data-thumb="images/Single Product/sipro_HondaCRV2.4PrestigePutih_3.jpg">
-                                                            <div className="thumb-image"> <img src="./../images/Single Product/sipro_HondaCRV2.4PrestigePutih_1.jpg" data-imagezoom="true" className="img-responsive" /> </div>
-                                                        </li>
-                                                        
-                                                        <li data-thumb="images/Single Product/sipro_HondaCRV2.4PrestigePutih_4.jpg">
-                                                            <div className="thumb-image"> <img src="images/Single Product/sipro_HondaCRV2.4PrestigePutih_2.jpg" data-imagezoom="true" className="img-responsive" /> </div>
-                                                        </li>
-                                                        
-                                                        <li data-thumb="images/Single Product/sipro_HondaCRV2.4PrestigePutih_7.jpg">
-                                                            <div className="thumb-image"> <img src="./../images/Single Product/sipro_HondaCRV2.4PrestigePutih_6.jpg" data-imagezoom="true" className="img-responsive" /> </div>
+                                                        <li data-thumb={'http://localhost:8000/Images/'+ this.state.image4}>
+                                                            <div className="thumb-image"> <img src={'http://localhost:8000/Images/'+ this.state.image4} data-imagezoom="true" className="img-responsive" /> </div>
                                                         </li>
                                                     </ul>
                                                 </div>
                                             </div>
 
                                             <div className="single-right simpleCart_shelfItem">
-                                                <h4>Honda CRV 2.4L Prestige 2013</h4>
+                                                <h4>{this.state.merk} {this.state.model} {this.state.variant} {this.state.conditioncar} {this.state.prodyear} ({this.state.conditioncar})</h4>
                                                 <div className="block">
                                                     <div className="starbox small ghosting"> </div>
                                                 </div>
-                                                <p className="price item_price">Rp 260.000.000</p>
+                                                <p className="price item_price">Rp {this.state.price_Rp}</p>
                                                 <div className="description">
                                                     <p><span>Quick Overview : </span> </p>
-                                                    <p>Kondisi Bekas.</p> 
-                                                    <p>Mobil masih tampak seperti baru.</p> 
-                                                    <p>Pajak masih panjang.</p> 
-                                                    <p>Bebas dari banjir dan tabrakan.</p> 
-                                                    <p>Interior mewah dan masih berfungsi dengan baik.</p>
-                                                    <p>Eksterior masih tampil elegan seperti mobil baru.</p>
-                                                    <p>Kondisi sangat terawat.</p>
+                                                    <p>{this.state.overview}</p> 
                                                 </div>
 
                                                 <div className="color-quality">
@@ -79,8 +208,8 @@ class ProductDetail extends Component
                                                 </div>
 
                                                 <div className="women">
-                                                    <span className="size">2.4 L Prestige </span>
-                                                    <a href="#" data-text="Add To Cart" className="my-cart-b item_add">Add To Cart</a>
+                                                    {/* <span className="size">2.4 L Prestige </span> */}
+                                                    <Link to='/cart' data-text="Add To Cart" className="my-cart-b item_add">Add To Cart</Link>
                                                 </div>
 
                                                 <div className="social-icon">
@@ -237,8 +366,8 @@ class ProductDetail extends Component
 
                                                         <div className="recent-right">
                                                             <h6 className="best2"><Link to="/single">Mercedes-Benz C200 1.8L CGI </Link></h6>
-                                                            <div class="block">
-                                                                <div class="starbox small ghosting"> </div>
+                                                            <div className="block">
+                                                                <div className="starbox small ghosting"> </div>
                                                             </div>
                                                             <span className=" price-in1"><del>Rp 272.564.102</del> Rp 255.000.000</span>
                                                         </div>	
@@ -253,8 +382,8 @@ class ProductDetail extends Component
 
                                                         <div className="recent-right">
                                                             <h6 className="best2"><Link to="/single">Honda Civic 2.0L FD</Link></h6>
-                                                            <div class="block">
-                                                                <div class="starbox small ghosting"> </div>
+                                                            <div className="block">
+                                                                <div className="starbox small ghosting"> </div>
                                                             </div>
                                                             <span className=" price-in1"><del>Rp 156.388.392</del> Rp 135.000.000</span>
                                                         </div>	
@@ -270,8 +399,8 @@ class ProductDetail extends Component
                                                         
                                                         <div className="recent-right">
                                                             <h6 className="best2"><Link to="/single">NIssan X-Trail 2.5L ST</Link></h6>
-                                                            <div class="block">
-                                                                <div class="starbox small ghosting"> </div>
+                                                            <div className="block">
+                                                                <div className="starbox small ghosting"> </div>
                                                             </div>
                                                             <span className=" price-in1"> <del>Rp 97.521.739</del> Rp 85.000.000</span>
                                                         </div>
@@ -301,154 +430,78 @@ class ProductDetail extends Component
                                         </div>
 
                                         <div className="col-md-8 product-grid1">
-                                            <div className="tab-wl3">
-                                                <div className="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
-                                                <ul id="myTab" className="nav nav-tabs left-tab" role="tablist">
-                                                    <li role="presentation" className="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">Spesifikasi dan Fitur</a></li>
-                                                    <li role="presentation"><a href="#reviews" role="tab" id="reviews-tab" data-toggle="tab" aria-controls="reviews">Reviews (1)</a></li>
-                                                </ul>
-                                                <div id="myTabContent" className="tab-content">
-                                                    <div role="tabpanel" className="tab-pane fade in active" id="home" aria-labelledby="home-tab">
-                                                    <div className="descr">
-                                                        <button onclick="myFunction('Demo1')" className="sipro-button sipro-block sipro-black sipro-left-align">Spesifikasi Mesin</button>
-                                                        <div id="Demo1" className="sipro-hide sipro-container">
-                                                        <table>
-                                                            <tbody><tr>
-                                                                <td id="left">Tipe Mesin</td>
-                                                                <td id="right">i-VTEC DOHC + DBW</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td id="left">Kapasitas Silinder</td>
-                                                                <td id="right">2354 cc</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td id="left">Torsi</td>
-                                                                <td id="right">222 Nm</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td id="left">Tenaga Puncak</td>
-                                                                <td id="right">187 Hp</td>
-                                                            </tr>
-                                                            </tbody></table>
-                                                        </div>
-                                                        <button onclick="myFunction('Demo2')" className="sipro-button sipro-block sipro-black sipro-left-align">Dimensi</button>
-                                                        <div id="Demo2" className="sipro-hide sipro-container">
-                                                        <table>
-                                                            <tbody><tr>
-                                                                <td id="left">Panjang</td>
-                                                                <td id="right">4545 mm</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td id="left">Lebar</td>
-                                                                <td id="right">1820 mm</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td id="left">Tinggi</td>
-                                                                <td id="right">1685 mm</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td id="left">Jarak Sumbu Roda </td>
-                                                                <td id="right">2620 mm</td>
-                                                            </tr>
-                                                            </tbody></table>
-                                                        </div>
-                                                        <button onclick="myFunction('Demo3')" className="sipro-button sipro-block sipro-black sipro-left-align">Interior</button>
-                                                        <div id="Demo3" className="sipro-hide sipro-container">
-                                                        <ul type="disc">
-                                                            <li>One Push Ignition System</li>
-                                                            <li>i-AMD (intelligent Multi Information Display)</li>
-                                                            <li>Integrated Audio, Double Double DIN AM/FM, single disc. MP3, WMA, ACC, USB, made for iPod &amp; iPhone</li>
-                                                            <li>Automatic AC with dual zone climate controle</li>
-                                                            <li>ECON Mode</li>
-                                                            <li>Speed sensitive volume compensation audio (SVC)-4 mode</li>
-                                                            <li>Tilt &amp; Telescopic Steering Wheel with Leather</li>
-                                                            <li>Steering wheel-mounted controls</li>
-                                                            <li>Paddle Shift</li>
-                                                            <li>Cruise control</li>
-                                                            <li>Survisor with vanity mirror</li>
-                                                            <li>Combi meter cluster + ECO assist</li>
-                                                            <li>Seat adjustment in front cabin</li>
-                                                            <li>Arm rest bagian depan in front cabin</li>
-                                                            <li>Arm rest + Cup holders in back cabin</li>
-                                                            <li>Dual map lights</li>
-                                                            <li>Sunglasses box</li>
-                                                            <li>One action Seat arrangement</li>
-                                                            <li>Central console + rear ac ventilation</li>
-                                                        </ul>
-                                                        </div>
-                                                        <button onclick="myFunction('Demo4')" className="sipro-button sipro-block sipro-black sipro-left-align">Eksterior</button>
-                                                        <div id="Demo4" className="sipro-hide sipro-container">
-                                                        <ul type="square">
-                                                            <li>Projector Headlight</li>
-                                                            <li>Foq Lamp</li>
-                                                            <li>Heat rejecting green-tinied glass</li>
-                                                            <li>Lead high mount stop lamp</li>
-                                                            <li>Power retractable side door mirror with LED turning signal</li>
-                                                            <li>Shark Fin antenna</li>
-                                                        </ul>
-                                                        </div>
-                                                        <button onclick="myFunction('Demo5')" className="sipro-button sipro-block sipro-black sipro-left-align">Safety</button>
-                                                        <div id="Demo5" className="sipro-hide sipro-container">
-                                                        <ul type="circle">
-                                                            <li>VSA (Vehicle Stability Assist)</li>
-                                                            <li>Hill Start Assist</li>
-                                                            <li>ABS + EBD</li>
-                                                            <li>Dual Airbag</li>
-                                                            <li>Front Seatblet with ELR 3 point (x2) with pretensioner and Load Limiter</li>
-                                                            <li>Back Seatbelt with ELR 3 point (x3)</li>
-                                                            <li>immobilizer with security alarm</li>
-                                                            <li>Smart key</li>
-                                                            <li>keyless and smart entry</li>
-                                                        </ul>
-                                                        </div>
-                                                    </div>
-                                                    </div>
-                                                    <div role="tabpanel" className="tab-pane fade" id="reviews" aria-labelledby="reviews-tab">
-                                                    <div className="descr">
-                                                        <div className="reviews-top">
-                                                        <div className="reviews-left">
-                                                            <img src="images/men3.jpg" alt=" " className="img-responsive" />
-                                                        </div>
-                                                        <div className="reviews-right">
-                                                            <ul>
-                                                            <li><a href="#">Admin</a></li>
-                                                            <li><a href="#"><i className="glyphicon glyphicon-share" aria-hidden="true" />Reply</a></li>
-                                                            </ul>
-                                                            <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit.</p>
-                                                        </div>
-                                                        <div className="clearfix" />
-                                                        </div>
-                                                        <div className="reviews-bottom">
-                                                        <h4>Add Reviews</h4>
-                                                        <p>Your email address will not be published. Required fields are marked *</p>
-                                                        <p>Your Rating</p>
-                                                        <div className="block">
-                                                            <div className="starbox small ghosting"><div className="positioner"><div className="stars"><div className="ghost" style={{width: '42.5px', display: 'none'}} /><div className="colorbar" style={{width: '42.5px'}} /><div className="star_holder"><div className="star star-0" /><div className="star star-1" /><div className="star star-2" /><div className="star star-3" /><div className="star star-4" /></div></div></div></div>
-                                                        </div>
-                                                        <form action="#" method="post">
-                                                            <label>Your Review </label>
-                                                            <textarea type="text" name="Message" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message...';}" required defaultValue={"Message..."} />
-                                                            <div className="row">
-                                                            <div className="col-md-6 row-grid">
-                                                                <label>Name</label>
-                                                                <input type="text" defaultValue="Name" name="Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name';}" required />
+                                            <div className="container">
+                                                <div className="row">
+                                                        <div role="tabpanel" className="tab-pane" id="home" aria-labelledby="home-tab">
+                                                            <div className="descr">
+                                                                <button onClick={() => this.myFunction("Demo1")} className="sipro-button sipro-block sipro-black sipro-left-align">Engine Specification</button>
+                                                                <div id="Demo1" className="sipro-show sipro-container">
+                                                                    <table>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td id="left">Engine (cc)</td>
+                                                                                <td id="right">{this.state.engine}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="left">Torque (Nm)</td>
+                                                                                <td id="right">{this.state.torque}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="left">Power (Hp)</td>
+                                                                                <td id="right">{this.state.power}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+
+                                                                <button onClick={() => this.myFunction('Demo2')} className="sipro-button sipro-block sipro-black sipro-left-align">Dimension</button>
+                                                                <div id="Demo2" className="sipro-show sipro-container">
+                                                                    <table>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td id="left">Height (mm)</td>
+                                                                                <td id="right">{this.state.height}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="left">Width (mm)</td>
+                                                                                <td id="right">{this.state.width}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="left">Wheelbase (mm)</td>
+                                                                                <td id="right">{this.state.wheelbase}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="left">Ground Clearance (mm)</td>
+                                                                                <td id="right">{this.state.groudclearance}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+
+                                                                <button onClick={() => this.myFunction('Demo3')} className="sipro-button sipro-block sipro-black sipro-left-align">Interior</button>
+                                                                <div id="Demo3" className="sipro-show sipro-container">
+                                                                    <ul>
+                                                                        {this.state.interior}
+                                                                    </ul>
+                                                                </div>
+
+                                                                <button onClick={() => this.myFunction('Demo4')} className="sipro-button sipro-block sipro-black sipro-left-align">Exterior</button>
+                                                                <div id="Demo4" className="sipro-show sipro-container">
+                                                                    <ul>
+                                                                        {this.state.exterior}
+                                                                    </ul>
+                                                                </div>
+
+                                                                <button onClick={() => this.myFunction('Demo5')} className="sipro-button sipro-block sipro-black sipro-left-align">Safety</button>
+                                                                <div id="Demo5" className="sipro-show sipro-container">
+                                                                    <ul>
+                                                                        {this.state.safety}
+                                                                    </ul>
+                                                                </div>
                                                             </div>
-                                                            <div className="col-md-6 row-grid">
-                                                                <label>Email</label>
-                                                                <input type="email" defaultValue="Email" name="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}" required />
-                                                            </div>
-                                                            <div className="clearfix" />
-                                                            </div>
-                                                            <input type="submit" defaultValue="SEND" />
-                                                        </form>
                                                         </div>
-                                                    </div>
-                                                    </div>
-                                                    <div role="tabpanel" className="tab-pane fade" id="custom" aria-labelledby="custom-tab">
-                                                    </div>
                                                 </div>
-                                                </div>
-                                            </div>
+                                            </div>                  
                                         </div>
                                         
                                         <div className="clearfix"> </div>

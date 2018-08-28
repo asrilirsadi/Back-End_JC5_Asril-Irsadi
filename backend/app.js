@@ -35,10 +35,10 @@ app.post('/registeradmin', (req,res) =>
     var Email = req.body.email;
     var AdminStatus = 'user';
 
-    console.log(`Username     : ${Username}`);
-    console.log(`Password     : ${Password}`);
-    console.log(`Email        : ${Email}`);
-    console.log(`Admin Status : ${AdminStatus}`);
+    // console.log(`Username     : ${Username}`);
+    // console.log(`Password     : ${Password}`);
+    // console.log(`Email        : ${Email}`);
+    // console.log(`Admin Status : ${AdminStatus}`);
 
     var encpass = crypto.createHash('sha256', secret).update(Password).digest('hex');
     console.log(`Password setelah di encrypt : ${encpass}`);
@@ -58,11 +58,11 @@ app.post('/loginadmin', (req,res) =>
     var username = req.body.username;
     var password = req.body.password;
 
-    console.log(`Username     : ${username}`);
-    console.log(`Password     : ${password}`);
+    // console.log(`Username     : ${username}`);
+    // console.log(`Password     : ${password}`);
     
     var encpass = crypto.createHash('sha256', secret).update(password).digest('hex');
-    console.log(`Password setelah di encrypt : ${encpass}`);
+    // console.log(`Password setelah di encrypt : ${encpass}`);
 
     var pullData = 'SELECT * FROM user_admin';
     db.query(pullData, (err,result) =>
@@ -586,6 +586,8 @@ app.post('/hapusproduct', (req,res) =>
     })
 });
 
+
+
 // - - - - - - USER - - - - - - // 
 
 app.post('/registeruser', (req,res) => 
@@ -649,12 +651,103 @@ app.post('/loginuser', (req,res) =>
 
 app.get('/getgambarproduct', (req,res) =>
 {
-    var pullprodimg = 'SELECT product.id, master_merk.merk, master_model.model, master_variant.variant, product.prodyear, master_body_type.body_type, transmission, master_colour.colour, master_cityordistrict.cityordistrict, product.conditioncar, product.price_Rp, product_image.image1, product_image.image2, product_image.image3, product_image.image4 FROM product LEFT JOIN master_merk ON product.merk_id = master_merk.id LEFT JOIN master_model ON product.model_id = master_model.id LEFT JOIN master_variant ON product.variant_id = master_variant.id LEFT JOIN master_body_type ON product.bodytype_id = master_body_type.id LEFT JOIN master_colour ON product.colour_id = master_colour.id LEFT JOIN master_cityordistrict ON product.cityordistrict_id = master_cityordistrict.id LEFT JOIN product_image ON product.id = product_image.product_id';
+    var pullprodimg = 'SELECT product.id, master_merk.merk, master_model.model, master_variant.variant, product.prodyear, master_body_type.body_type, transmission, master_colour.colour, master_cityordistrict.cityordistrict, product.conditioncar, product.price_Rp, product_image.image1, product_image.image2 FROM product LEFT JOIN master_merk ON product.merk_id = master_merk.id LEFT JOIN master_model ON product.model_id = master_model.id LEFT JOIN master_variant ON product.variant_id = master_variant.id LEFT JOIN master_body_type ON product.bodytype_id = master_body_type.id LEFT JOIN master_colour ON product.colour_id = master_colour.id LEFT JOIN master_cityordistrict ON product.cityordistrict_id = master_cityordistrict.id LEFT JOIN product_image ON product.id = product_image.product_id';
 
     db.query(pullprodimg, (err,result) =>
     {
         if (err) throw err;
         
         res.send(result);
+        // console.log(result)
+    })
+});
+
+app.post('/getproductchoosen/:productID', (req,res) =>
+{
+    
+    var pullprodchoosen = `SELECT product.id, master_merk.merk, master_model.model, product.model_id, master_variant.variant, product.variant_id, product.prodyear, master_body_type.body_type, product.bodytype_id, transmission, master_colour.colour, master_cityordistrict.cityordistrict, product.conditioncar, product.price_Rp, product_image.image1, product_image.image2, product_image.image3, product_image.image4, product.overview FROM product LEFT JOIN master_merk ON product.merk_id = master_merk.id LEFT JOIN master_model ON product.model_id = master_model.id LEFT JOIN master_variant ON product.variant_id = master_variant.id LEFT JOIN master_body_type ON product.bodytype_id = master_body_type.id LEFT JOIN master_colour ON product.colour_id = master_colour.id LEFT JOIN master_cityordistrict ON product.cityordistrict_id = master_cityordistrict.id LEFT JOIN product_image ON product.id = product_image.product_id WHERE product.id= "${req.params.productID}"`;
+
+    db.query(pullprodchoosen, (err,result) =>
+    {
+        if (err) throw err;
+        console.log(result);
+        res.send(result);
+    })
+});
+
+app.post('/getproductspec', (req,res) =>
+{
+    var modelID = req.params.modelID;
+    var variantID = req.params.variantID;
+    var bodytypeID = req.params.bodytypeID;
+    var prodyear =req.params.prodyear;
+    
+    var pullprodspec = `SELECT engine_cc, torque_Nm, power_hp, length_mm, width_mm, height_mm, wheelbase_mm, ground_clearance_mm, interior,safety FROM product_spec WHERE model_id = "${modelID}" AND variant_id = "${variantID}" AND bodytype_id = "${bodytypeID}" AND prodyear = "${prodyear}"`;
+
+    db.query(pullprodspec, (err,result) =>
+    {
+        if (err) throw err;
+        
+        res.send(result);
+    })
+});
+
+app.post('/order', (req, res) =>
+{
+    var userID = req.body.userID;
+    var productID = req.body.productID;
+
+    var insertcart = `INSERT INTO cart SET usercustomer_id="${userID}", product_id="${productID}"`;
+    
+    db.query(insertcart, (err, result) => 
+    {
+        if (err) throw err;
+        
+        res.send('1');
+    })
+});
+
+app.post('/cart', (req, res) =>
+{
+    var userID = req.body.userID;
+
+    var datacart = `SELECT * FROM cart WHERE usercustomer_id="${userID}"`;
+
+    db.query(datacart, (err, result) =>
+    {
+        if (err) throw err;
+
+        res.send(result);
+    })
+});
+
+app.post('/hapuscart', (req, res) =>
+{
+    var cartID = req.body.cartID;
+
+    var delcart = `DELETE FROM cart WHERE id="${cartID}"`;
+
+    db.query(delcart, (err, result) =>
+    {
+        if (err) throw err;
+
+        res.end();
+    })
+});
+
+app.post('/checkout', (req, res) =>
+{
+    var userID = req.body.userID;
+    var name = req.body.name;
+    var address = req.body.address;
+    var phone = req.body.phone;
+
+    var insertcheckout = `INSERT INTO checkout SET usercustomer_id="${userID}", name="${name}", address="${address}", phone="${phone}"`;
+
+    db.query(insertcheckout, (err, result) =>
+    {
+        if (err) throw err;
+
+        res.end();
     })
 });

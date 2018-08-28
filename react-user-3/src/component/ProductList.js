@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom'; 
+import {Link, Redirect} from 'react-router-dom'; 
 import axios from 'axios';
+
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 class ProductList extends Component 
 {
     state = 
     {
         dataproduct : [],
-        // dataprod : [], 
+        // usercustomerID: cookies.get('sessionID'),
+        //productID: '',
+
+        redirectCart: false,
+        redirectLogin: false,
     }
 
     componentDidMount()
@@ -15,15 +23,51 @@ class ProductList extends Component
         axios.get('http://localhost:8000/getgambarproduct')
         .then((ambildata) =>
         {
-            console.log(ambildata)
+            console.log(ambildata.data.id)
             this.setState({
-                            dataproduct: ambildata.data
+                            dataproduct: ambildata.data,
+                            productID: ambildata.data.id,
                         })
         })
     }
 
+    order = (ordered) =>
+    {
+        var userID = cookies.get('sessionID')
+
+        if(userID !== undefined)
+        {
+            axios.post('http://localhost:8000/order',
+            {
+                userID: userID,
+                productID: ordered.productID.value
+            })
+            .then((response) =>
+            {
+                var storestat = response.data;
+                if(storestat == 1)
+                {
+                    this.setState({
+                                    redirectCart: true
+                                })
+                }
+            })
+        }
+        else
+        {
+            this.setState({
+                            redirectLogin: true
+                        })
+        } 
+    }
+
     render() 
     {
+        if (this.state.redirectCart) return <Redirect to='/Cart'/>
+        // if user success add to cart, then move to cart page
+        if (this.state.redirectLogin) return <Redirect to='/Login'/>
+        // if user not login yet, when user hit add to cart, they will
+        // redirect to login
         const prodlist = this.state.dataproduct.map((item,index) =>
                         {
                             var urut = index + 1;
@@ -38,12 +82,13 @@ class ProductList extends Component
                             var price_Rp = item.price_Rp;
                             var image1 = item.image1;
                             var image2 = item.image2;
+                            //console.log(productID);
                         
                             return <div className="col-md-4 product-tab-grid simpleCart_shelfItem">
                                         <div className="grid-arr">
                                             <div  className="grid-arrival">
-                                                <figure>		
-                                                    <Link to={{pathname: "/productdetail", state:{productID:productID}}} className="new-gri" data-toggle="modal" data-target="#myModal1">
+                                                <figure key={index}>		
+                                                    <Link to={{pathname: '/productdetail/', state: {productID: productID}}} className="new-gri" data-toggle="modal" data-target="#myModal1">
                                                         <div className="grid-img">
                                                             <img src={'http://localhost:8000/Images/'+ image2} className="img-responsive" alt />
                                                             {/* <img  src="./../images/lipro_toyotayaris2018_citrus2.jpg" className="img-responsive" alt="" /> */}
@@ -57,15 +102,19 @@ class ProductList extends Component
                                                 </figure>	
                                             </div>
 
-                                            <div class="block">
-                                                <div class="starbox small ghosting"> </div>
+                                            <div className="block">
+                                                <div className="starbox small ghosting"> </div>
                                             </div>
 
-                                            <div class="women">
-                                                <h6><Link to={{pathname: "/productdetail", state:{productID:productID}}}>{merk} {model} {variant} {prodyear}</Link></h6>
-                                                <span class="size">{bodytype} {transmission} ({conditioncar})</span>
-                                                <p ><em class="item_price">Rp {price_Rp}</em></p>
-                                                <a href="#" data-text="Add To Cart" class="my-cart-b item_add">Add To Cart</a>
+                                            <div className="women" key={index}>
+                                                <h6><Link to={{pathname: '/productdetail/', state: {productID:productID}}}>{merk} {model} {variant} {prodyear}</Link></h6>
+                                                <span className="size">{bodytype} {transmission} ({conditioncar})</span>
+                                                <p ><em className="item_price">Rp {price_Rp}</em></p>
+                                                <input className="text-center styleproddet" ref="productID" type="hidden" value={productID}/>&nbsp;
+                                                {/* <input className="text-center styleproddet" ref="usercustomerID" type="hidden" value={this.state.usercustomerID}/>&nbsp; */}
+                                                <button type="button" className="btn btn-success" onClick={() => this.order(this.refs)}><i className="fa fa-shopping-cart"></i> Add To Cart
+                                                </button>
+                                                {/* <Link to={{pathname: '/cart/', state: {productID: productID}}} data-text="Add To Cart" className="my-cart-b item_add">Add To Cart</Link> */}
                                             </div>
                                         </div>
                                     </div>

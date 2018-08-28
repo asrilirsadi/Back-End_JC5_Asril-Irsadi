@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom'; 
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
 
 // import img_1 from './../images/toyotaCHR.jpg';
 // import img_2 from './../images/hondaCIVICHatchback.jpg'; 
@@ -11,8 +14,14 @@ import {Link} from 'react-router-dom';
 
 class Header extends Component
 {
+    logout() 
+    {
+        cookies.remove('sessionID')
+    }
     render()
     {
+       
+
         return (
                     <div className="header">
                         <div className="header-top container-fluid">
@@ -26,6 +35,7 @@ class Header extends Component
                                         <li><Link to="/profile">My Account</Link></li>
                                         <li><Link to="/checkout">Checkout</Link></li>
                                         <li><Link to="/login">Login</Link></li>
+                                        <li><Link to="/login" onClick={() => this.logout()}>Logout</Link></li>
                                         <li><Link to="/register"> Register </Link></li>
                                     </ul>
                                 </div>   
