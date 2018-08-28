@@ -28,6 +28,7 @@ class Header extends Component
         })
     }
 
+
     render() 
     {
 
@@ -278,7 +279,7 @@ class Header extends Component
                                         <a href="#" className="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div className="pull-right">
-                                        <a href="#" className="btn btn-default btn-flat">Sign out</a>
+                                        <button className="btn btn-default btn-flat">Sign out</button>
                                     </div>
                                     </li>
                                 </ul>

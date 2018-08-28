@@ -748,6 +748,6 @@ app.post('/checkout', (req, res) =>
     {
         if (err) throw err;
 
-        res.end();
+        res.send('1');
     })
 });
