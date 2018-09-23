@@ -662,40 +662,71 @@ app.get('/getgambarproduct', (req,res) =>
     })
 });
 
-app.post('/getproductchoosen/:productID', (req,res) =>
+app.post('/productdetail2', (req,res) =>
 {
-    
-    var pullprodchoosen = `SELECT product.id, master_merk.merk, master_model.model, product.model_id, master_variant.variant, product.variant_id, product.prodyear, master_body_type.body_type, product.bodytype_id, transmission, master_colour.colour, master_cityordistrict.cityordistrict, product.conditioncar, product.price_Rp, product_image.image1, product_image.image2, product_image.image3, product_image.image4, product.overview FROM product LEFT JOIN master_merk ON product.merk_id = master_merk.id LEFT JOIN master_model ON product.model_id = master_model.id LEFT JOIN master_variant ON product.variant_id = master_variant.id LEFT JOIN master_body_type ON product.bodytype_id = master_body_type.id LEFT JOIN master_colour ON product.colour_id = master_colour.id LEFT JOIN master_cityordistrict ON product.cityordistrict_id = master_cityordistrict.id LEFT JOIN product_image ON product.id = product_image.product_id WHERE product.id= "${req.params.productID}"`;
+    // console.log(req.body.productID)
+    var pullprodchoosen = `SELECT product.id, master_merk.merk, master_model.model, product.model_id, master_variant.variant, product.variant_id, product.prodyear, master_body_type.body_type, product.bodytype_id, transmission, master_colour.colour, master_cityordistrict.cityordistrict, product.conditioncar, product.price_Rp, product_image.image1, product_image.image2, product_image.image3, product_image.image4, product.overview FROM product LEFT JOIN master_merk ON product.merk_id = master_merk.id LEFT JOIN master_model ON product.model_id = master_model.id LEFT JOIN master_variant ON product.variant_id = master_variant.id LEFT JOIN master_body_type ON product.bodytype_id = master_body_type.id LEFT JOIN master_colour ON product.colour_id = master_colour.id LEFT JOIN master_cityordistrict ON product.cityordistrict_id = master_cityordistrict.id LEFT JOIN product_image ON product.id = product_image.product_id WHERE product.id= "${req.body.productID}"`;
 
     db.query(pullprodchoosen, (err,result) =>
     {
         if (err) throw err;
-        console.log(result);
-        res.send(result);
+        // console.log(result);
+        // res.send(result);
+
+        var modelID = result[0].model_id;
+        var variantID = result[0].variant_id;
+        var bodytypeID = result[0].bodytype_id;
+        var prodyear = result[0].prodyear;
+
+        // console.log(modelID)
+        // console.log(variantID)
+        // console.log(bodytypeID)
+        // console.log(prodyear)
+
+        var pullprodspec = `SELECT engine_cc, torque_Nm, power_hp, length_mm, width_mm, height_mm, wheelbase_mm, ground_clearance_mm, exterior, interior, safety FROM product_spec WHERE model_id = "${modelID}" AND variant_id = "${variantID}" AND bodytype_id = "${bodytypeID}" AND prodyear = "${prodyear}"`;
+
+        db.query(pullprodspec, (err,result2) =>
+        {
+            if (err) throw err;
+            // console.log(result2);
+            else
+            {
+                var hasil = [{result},{result2}]
+                res.send(hasil);
+            }
+            
+        })
     })
 });
 
-app.post('/getproductspec', (req,res) =>
-{
-    var modelID = req.params.modelID;
-    var variantID = req.params.variantID;
-    var bodytypeID = req.params.bodytypeID;
-    var prodyear =req.params.prodyear;
+// app.post('/getproductspec', (req,res) =>
+// {
+//     var modelID = req.params.modelID;
+//     var variantID = req.params.variantID;
+//     var bodytypeID = req.params.bodytypeID;
+//     var prodyear =req.params.prodyear;
+
+//     // console.log(modelID)
+//     // console.log(variantID)
+//     // console.log(bodytypeID)
+//     // console.log(prodyear)
     
-    var pullprodspec = `SELECT engine_cc, torque_Nm, power_hp, length_mm, width_mm, height_mm, wheelbase_mm, ground_clearance_mm, interior,safety FROM product_spec WHERE model_id = "${modelID}" AND variant_id = "${variantID}" AND bodytype_id = "${bodytypeID}" AND prodyear = "${prodyear}"`;
+//     var pullprodspec = `SELECT engine_cc, torque_Nm, power_hp, length_mm, width_mm, height_mm, wheelbase_mm, ground_clearance_mm, interior,safety FROM product_spec WHERE model_id = "${modelID}" AND variant_id = "${variantID}" AND bodytype_id = "${bodytypeID}" AND prodyear = "${prodyear}"`;
 
-    db.query(pullprodspec, (err,result) =>
-    {
-        if (err) throw err;
+//     db.query(pullprodspec, (err,result) =>
+//     {
+//         if (err) throw err;
         
-        res.send(result);
-    })
-});
+//         res.send(result);
+//     })
+// });
 
 app.post('/order', (req, res) =>
 {
     var userID = req.body.userID;
     var productID = req.body.productID;
+    console.log(userID);
+    console.log(productID);
 
     var insertcart = `INSERT INTO cart SET usercustomer_id="${userID}", product_id="${productID}"`;
     
@@ -710,6 +741,9 @@ app.post('/order', (req, res) =>
 app.post('/cart', (req, res) =>
 {
     var userID = req.body.userID;
+    // var productID = req.body.productID;
+    // console.log(userID);
+    // console.log(productID);
 
     var datacart = `SELECT * FROM cart WHERE usercustomer_id="${userID}"`;
 

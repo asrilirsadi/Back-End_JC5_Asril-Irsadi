@@ -23,7 +23,7 @@ class ProductList extends Component
         axios.get('http://localhost:8000/getgambarproduct')
         .then((ambildata) =>
         {
-            console.log(ambildata.data.id)
+            // console.log(ambildata.data)
             this.setState({
                             dataproduct: ambildata.data,
                             productID: ambildata.data.id,
@@ -34,6 +34,7 @@ class ProductList extends Component
     order = (ordered) =>
     {
         var userID = cookies.get('sessionID')
+        console.log(ordered.productID.value)
 
         if(userID !== undefined)
         {
@@ -63,7 +64,7 @@ class ProductList extends Component
 
     render() 
     {
-        if (this.state.redirectCart) return <Redirect to='/Cart'/>
+        if (this.state.redirectCart) return <Redirect to='/cart'/>
         // if user success add to cart, then move to cart page
         if (this.state.redirectLogin) return <Redirect to='/Login'/>
         // if user not login yet, when user hit add to cart, they will
@@ -88,7 +89,7 @@ class ProductList extends Component
                                         <div className="grid-arr">
                                             <div  className="grid-arrival">
                                                 <figure key={index}>		
-                                                    <Link to={{pathname: '/productdetail/', state: {productID: productID}}} className="new-gri" data-toggle="modal" data-target="#myModal1">
+                                                    <Link to={{pathname: '/productdetail2', state: {productID: productID}}} className="new-gri" data-toggle="modal" data-target="#myModal1">
                                                         <div className="grid-img">
                                                             <img src={'http://localhost:8000/Images/'+ image2} className="img-responsive" alt />
                                                             {/* <img  src="./../images/lipro_toyotayaris2018_citrus2.jpg" className="img-responsive" alt="" /> */}
@@ -107,12 +108,13 @@ class ProductList extends Component
                                             </div>
 
                                             <div className="women" key={index}>
-                                                <h6><Link to={{pathname: '/productdetail/', state: {productID:productID}}}>{merk} {model} {variant} {prodyear}</Link></h6>
+                                                <h6><Link to={{pathname: '/productdetail2', state: {productID:productID}}}>{merk} {model} {variant} {prodyear}</Link></h6>
                                                 <span className="size">{bodytype} {transmission} ({conditioncar})</span>
                                                 <p ><em className="item_price">Rp {price_Rp}</em></p>
                                                 <input className="text-center styleproddet" ref="productID" type="hidden" value={productID}/>&nbsp;
                                                 {/* <input className="text-center styleproddet" ref="usercustomerID" type="hidden" value={this.state.usercustomerID}/>&nbsp; */}
-                                                <button type="button" className="btn btn-success" onClick={() => this.order(this.refs)}><i className="fa fa-shopping-cart"></i> Add To Cart
+                                                <button type="button" className="btn btn-success" onClick={() => this.order(this.refs)}><i className="fa fa-shopping-cart"></i> 
+                                                    Add To Cart
                                                 </button>
                                                 {/* <Link to={{pathname: '/cart/', state: {productID: productID}}} data-text="Add To Cart" className="my-cart-b item_add">Add To Cart</Link> */}
                                             </div>

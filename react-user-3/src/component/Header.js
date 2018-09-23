@@ -36,7 +36,7 @@ class Header extends Component
                                         <li><Link to="/checkout">Checkout</Link></li>
                                         <li><Link to="/login">Login</Link></li>
                                         <li><Link to="/login" onClick={() => this.logout()}>Logout</Link></li>
-                                        <li><Link to="/register"> Register </Link></li>
+                                        {/* <li><Link to="/register"> Register </Link></li> */}
                                     </ul>
                                 </div>   
                             </div>
